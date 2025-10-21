@@ -1,79 +1,14 @@
-﻿<!DOCTYPE html>
-<html>
-	<head>
-		<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-		<title>inScript Bible Browser</title>
-		<style>
-		body {
-			background: #ccc;
-		}
-		#app {
-			width: 300px;
-			height: 220px;
-			padding: 20px;
-			font-family: Helvetica, Arial;
-			position: absolute;
-			top: 50%;
-			left: 50%;
-			margin: -120px 0 0 -160px;
-			background: #fff;
-			box-shadow: rgba(0,0,0,0.5) 0 0 10px;
-		}
-		#app h1 {
-			font-size: 16px;
-			text-align: center;
-			margin: 20px 0;
-		}
-		#versions {
-			overflow: hidden;
-			margin: 0 0 0 -20px;
-			padding: 0;
-		}
-		#versions li {
-			margin: 0;
-			padding: 0;
-			float: left;
-			list-style-type: none;
-		}
-		#versions a {
-			display: block;
-			float: left;
-			margin: 0 0 0 20px;
-			background: #ddd;
-			border: solid 1px #333;
-			width: 138px;
-
-			text-align: center;
-			padding: 30px 0;
-			text-decoration: none;
-			color: #333;
-		}
-		#versions a:hover {
-			background: #ccc;
-
-		}
-		#app p {
-			margin: 30px 0 0 0;
-			font-size: 12px;
-			text-align: center;
-			
-		}
-		#app p a{
-			color: #888;
-		}
-		</style>
-	</head>
-	<body>
-		
-		<div id="app">
-			<h1>inScript Bible Browser</h1>
-	
-			<ul id="versions">		
-				<li><a href="app/reader.html">Reader</a></li>
-				<li><a href="app/index.html">Desktop</a></li>
-			</ul>
-	
-			<p>Built by the <a href="http://dbsbible.org">Digital Bible Society</a>, available at <a href="http://github.com/digitalbiblesociety">github</a>
-		</div>
-	</body>
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="apple-mobile-web-app-capable" content="yes" />
+    <link rel="icon" type="image/png" href="/favicon.png" />
+    <title>inScript Bible Browser</title>
+  </head>
+  <body>
+    <div id="root"></div>
+    <script type="module" src="/src/main.jsx"></script>
+  </body>
 </html>

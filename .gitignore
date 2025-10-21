@@ -13,3 +13,11 @@
 /app/content/videos/*.mp4
 /app/content/images/*.jpg
 *.db
+node_modules
+dist
+*.log
+.DS_Store
+.env
+.env.local
+.env.production.local
+.env.development.local
