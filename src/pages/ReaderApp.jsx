@@ -1,10 +1,10 @@
-import React, { useState, useEffect, useRef } from 'react'
+import React, { useState, useEffect } from 'react'
 import { BOOK_DATA } from '../data/bibleData.js'
 import './ReaderApp.css'
 
 function ReaderApp() {
-  const [version1, setVersion1] = useState('eng_kjv')
-  const [version2, setVersion2] = useState('')
+  const [version1] = useState('eng_kjv')
+  const [version2] = useState('')
   const [currentReference, setCurrentReference] = useState('John.1')
   const [chapters, setChapters] = useState([])
   const [showVersionNav, setShowVersionNav] = useState(false)

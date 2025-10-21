@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react'
 import { BOOK_DATA } from '../data/bibleData.js'
+import versionsLoader from '../utils/versionsLoader.js'
 import './DesktopApp.css'
 
 function DesktopApp() {
@@ -8,6 +9,17 @@ function DesktopApp() {
     { id: 2, version: 'eng_kjv', location: 'John.3.1', linked: true }
   ])
   const [activeDoc, setActiveDoc] = useState(1)
+  const [availableVersions, setAvailableVersions] = useState([])
+
+  // Load available versions on mount
+  useEffect(() => {
+    const loadVersions = async () => {
+      await versionsLoader.loadAllVersions()
+      const versionOptions = versionsLoader.getVersionOptions()
+      setAvailableVersions(versionOptions)
+    }
+    loadVersions()
+  }, [])
 
   const parseReference = (ref) => {
     const parts = ref.split('.')
@@ -33,6 +45,9 @@ function DesktopApp() {
 
   const DocumentPane = ({ doc }) => {
     const [content, setContent] = useState('')
+    const [showBookList, setShowBookList] = useState(false)
+    const [showChapterList, setShowChapterList] = useState(false)
+    const [selectedBook, setSelectedBook] = useState('')
     const { book, chapter } = parseReference(doc.location)
     const bookData = BOOK_DATA[book]
     const bookName = bookData ? bookData.names.eng[0] : 'Unknown'
@@ -45,12 +60,142 @@ function DesktopApp() {
       load()
     }, [book, chapter, doc.version])
 
+    const handleVersionChange = (e) => {
+      const newVersion = e.target.value
+      setDocuments(documents.map(d => 
+        d.id === doc.id ? { ...d, version: newVersion } : d
+      ))
+    }
+
+    const handleBookSelect = (bookOsis) => {
+      setSelectedBook(bookOsis)
+      setShowBookList(false)
+      setShowChapterList(true)
+    }
+
+    const handleChapterSelect = (chapterNum) => {
+      const newLocation = `${selectedBook || book}.${chapterNum}.1`
+      setDocuments(documents.map(d => 
+        d.id === doc.id ? { ...d, location: newLocation } : d
+      ))
+      setShowChapterList(false)
+      
+      // Sync other documents if they are linked
+      if (doc.linked) {
+        setDocuments(prevDocs => prevDocs.map(d => 
+          d.id !== doc.id && d.linked ? { ...d, location: newLocation } : d
+        ))
+      }
+    }
+
+    const toggleLock = () => {
+      setDocuments(documents.map(d => 
+        d.id === doc.id ? { ...d, linked: !d.linked } : d
+      ))
+    }
+
     return (
       <div className={`document-pane ${activeDoc === doc.id ? 'active' : ''}`}>
         <div className="doc-header">
-          <h3>{bookName} {chapter}</h3>
-          <span className="version-tag">{doc.version}</span>
+          <div className="doc-header-left">
+            <button 
+              className="doc-nav-button"
+              onClick={() => setShowBookList(!showBookList)}
+              title="Select book and chapter"
+            >
+              {bookName} {chapter}
+            </button>
+            
+            <select 
+              className="doc-version-selector"
+              value={doc.version}
+              onChange={handleVersionChange}
+              title="Select Bible version"
+            >
+              {availableVersions.map(group => (
+                <optgroup key={group.label} label={group.label}>
+                  {group.options.map(option => (
+                    <option key={option.value} value={option.value}>
+                      {option.label}
+                    </option>
+                  ))}
+                </optgroup>
+              ))}
+            </select>
+          </div>
+          
+          <div className="doc-header-right">
+            <button 
+              className={`doc-lock-button ${doc.linked ? 'locked' : 'unlocked'}`}
+              onClick={toggleLock}
+              title={doc.linked ? 'Linked (click to unlink)' : 'Unlinked (click to link)'}
+            >
+              {doc.linked ? '🔒' : '🔓'}
+            </button>
+          </div>
         </div>
+
+        {showBookList && (
+          <div className="doc-navigation-popup book-list">
+            <h3>Select Book</h3>
+            <div className="nav-scroller">
+              <div className="book-group">
+                <h4>Old Testament</h4>
+                {Object.keys(BOOK_DATA).filter(key => {
+                  const bookIndex = Object.keys(BOOK_DATA).indexOf(key)
+                  return bookIndex < 39 // First 39 books are OT
+                }).map(bookOsis => {
+                  const bookInfo = BOOK_DATA[bookOsis]
+                  return (
+                    <button
+                      key={bookOsis}
+                      className="book-button"
+                      onClick={() => handleBookSelect(bookOsis)}
+                    >
+                      {bookInfo.names.eng[0]}
+                    </button>
+                  )
+                })}
+              </div>
+              <div className="book-group">
+                <h4>New Testament</h4>
+                {Object.keys(BOOK_DATA).filter(key => {
+                  const bookIndex = Object.keys(BOOK_DATA).indexOf(key)
+                  return bookIndex >= 39 // Books 39+ are NT
+                }).map(bookOsis => {
+                  const bookInfo = BOOK_DATA[bookOsis]
+                  return (
+                    <button
+                      key={bookOsis}
+                      className="book-button"
+                      onClick={() => handleBookSelect(bookOsis)}
+                    >
+                      {bookInfo.names.eng[0]}
+                    </button>
+                  )
+                })}
+              </div>
+            </div>
+          </div>
+        )}
+
+        {showChapterList && selectedBook && (
+          <div className="doc-navigation-popup chapter-list">
+            <h3>Select Chapter - {BOOK_DATA[selectedBook]?.names.eng[0]}</h3>
+            <div className="nav-scroller">
+              {Array.from({ length: BOOK_DATA[selectedBook]?.chapters.length || 0 }, (_, i) => (
+                <button
+                  key={i + 1}
+                  className="chapter-button"
+                  onClick={() => handleChapterSelect(i + 1)}
+                >
+                  {i + 1}
+                </button>
+              ))}
+            </div>
+          </div>
+        )}
+        
         <div 
           className="doc-content"
           dangerouslySetInnerHTML={{ __html: content }}

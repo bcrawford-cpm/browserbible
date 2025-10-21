@@ -22,7 +22,8 @@ export default [
         window: 'readonly',
         document: 'readonly',
         navigator: 'readonly',
-        console: 'readonly'
+        console: 'readonly',
+        fetch: 'readonly'
       }
     },
     plugins: {
@@ -37,7 +38,8 @@ export default [
         'warn',
         { allowConstantExport: true }
       ],
-      'react/react-in-jsx-scope': 'off'
+      'react/react-in-jsx-scope': 'off',
+      'react/prop-types': 'off'
     },
     settings: {
       react: {
