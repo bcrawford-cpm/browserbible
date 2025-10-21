@@ -1,0 +1,7 @@
+{
+	"name":"King James Version",
+	"abbreviation":"KJV",
+	"name": function(reference) {
+		return reference.toOsisChapter() + '.mp3';	
+	}
+}

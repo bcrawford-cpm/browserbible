@@ -1,11 +1,22 @@
 # Browser Bible 
 
-A browser based Bible Study Application built with the power triad of HTML, CSS, and JavaScript.
+A browser based Bible Study Application - now modernized with React!
+
+**🎉 NEW: React Refactor Branch Available!** - See [README-REACT.md](README-REACT.md) for the modern React version with Vite build system.
 
 * Created by: [Digital Bible Society](http://www.dbsbible.org)
 * Project Leader: John Dyer http://j.hn/
 * Code License: GPLv2/MIT
 * Content License: See each content folder for a license
+
+## Quick Start (React Version)
+
+```bash
+npm install
+npm run dev
+```
+
+Visit http://localhost:3000 to see the modernized React version!
 
 ## Goals
 
