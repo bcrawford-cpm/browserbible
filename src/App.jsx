@@ -1,5 +1,5 @@
 import React from 'react'
-import { BrowserRouter as Router, Routes, Route, Link } from 'react-router-dom'
+import { BrowserRouter as Router, Routes, Route } from 'react-router-dom'
 import LandingPage from './pages/LandingPage.jsx'
 import DesktopApp from './pages/DesktopApp.jsx'
 import ReaderApp from './pages/ReaderApp.jsx'
