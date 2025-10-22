@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react'
 import { BOOK_DATA } from '../data/bibleData.js'
 import versionsLoader from '../utils/versionsLoader.js'
+import ConfigMenu from '../components/ConfigMenu.jsx'
 import './DesktopApp.css'
 
 function DesktopApp() {
@@ -10,6 +11,7 @@ function DesktopApp() {
   ])
   const [activeDoc, setActiveDoc] = useState(1)
   const [availableVersions, setAvailableVersions] = useState([])
+  const [showConfig, setShowConfig] = useState(false)
 
   // Load available versions on mount
   useEffect(() => {
@@ -233,6 +235,13 @@ function DesktopApp() {
           onError={(e) => { e.target.style.display = 'none' }}
         />
         <div className="header-nav">
+          <button 
+            onClick={() => setShowConfig(true)} 
+            className="btn-config"
+            title="Settings"
+          >
+            ⚙️ Settings
+          </button>
           <button onClick={addDocument} className="btn-add-doc">
             + Add Document
           </button>
@@ -267,6 +276,8 @@ function DesktopApp() {
           />
         </a>
       </div>
+
+      <ConfigMenu isOpen={showConfig} onClose={() => setShowConfig(false)} />
     </div>
   )
 }
